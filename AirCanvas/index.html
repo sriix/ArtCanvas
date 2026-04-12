@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Canvas!</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- MediaPipe Hands -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <!-- Intro Modal (Glassmorphic) -->
+    <div id="intro_screen" class="intro-screen">
+        <div class="intro-glass-modal">
+            <h1>Air Canvas!</h1>
+            <p>Initializing Neural Network...</p>
+            <div class="grid-gestures">
+                <div class="gest">
+                    <span class="emoji">☝️</span>
+                    <span><strong>Draw</strong><br>Index Finger</span>
+                </div>
+                <div class="gest">
+                    <span class="emoji">🤏</span>
+                    <span><strong>Grab</strong><br>Thumb + Index</span>
+                </div>
+            </div>
+            <div class="loader-spinner"></div>
+        </div>
+    </div>
+
+    <!-- Main App Layout -->
+    <div class="app-container">
+        <!-- Canvases -->
+        <video id="input_video" class="input_video" autoplay playsinline></video>
+        <canvas id="output_canvas" class="output_canvas"></canvas>
+        <canvas id="drawing_canvas" class="drawing_canvas"></canvas>
+
+        <!-- Right Side Vertical Toolbar -->
+        <aside id="ui_layer_right" class="toolbar-sidebar" style="opacity: 0; pointer-events: none;">
+
+            <div class="toolbar-section">
+                <span class="section-title">Color Palette</span>
+                <div class="color-grid">
+                    <button class="color-swatch active" style="--sc: #00f0ff;" data-color="#00f0ff"></button>
+                    <button class="color-swatch" style="--sc: #ff00e5;" data-color="#ff00e5"></button>
+                    <button class="color-swatch" style="--sc: #39ff14;" data-color="#39ff14"></button>
+                    <button class="color-swatch" style="--sc: #ffea00;" data-color="#ffea00"></button>
+                    <button class="color-swatch" style="--sc: #ff3b30;" data-color="#ff3b30"></button>
+                    <button class="color-swatch" style="--sc: #af52de;" data-color="#af52de"></button>
+                    <button class="color-swatch" style="--sc: #ffffff;" data-color="#ffffff"></button>
+                    <button class="color-swatch" style="--sc: #000000; border: 1px solid rgba(255,255,255,0.2);"
+                        data-color="#000000"></button>
+                </div>
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <div class="toolbar-section tools-flex">
+                <div class="vertical-slider-wrapper">
+                    <span class="slider-val" id="size_val">8px</span>
+                    <div class="slider-track-container">
+                        <input type="range" id="thickness_slider" class="v-slider" min="2" max="60" value="8"
+                            orient="vertical">
+                    </div>
+                    <span class="slider-label">Size</span>
+                </div>
+                <div class="vertical-slider-wrapper">
+                    <span class="slider-val" id="glow_val">20%</span>
+                    <div class="slider-track-container">
+                        <input type="range" id="glow_slider" class="v-slider" min="0" max="50" value="20"
+                            orient="vertical">
+                    </div>
+                    <span class="slider-label">Glow</span>
+                </div>
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <div class="toolbar-section actions-grid">
+                <button id="draw_btn" class="action-btn active" title="Draw Mode">
+                    <ion-icon name="brush"></ion-icon>
+                </button>
+                <button id="erase_btn" class="action-btn" title="Erase Mode">
+                    <ion-icon name="bandage"></ion-icon>
+                </button>
+                <button id="pan_btn" class="action-btn" title="Move Canvas">
+                    <ion-icon name="hand-right"></ion-icon>
+                </button>
+                <button id="clear_btn" class="action-btn danger" title="Clear Canvas">
+                    <ion-icon name="trash"></ion-icon>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Bottom Center HUD -->
+        <div class="gesture-hud" id="gesture_status" style="opacity: 0;">
+            <span id="gesture_emoji" class="hud-emoji">⌛</span>
+            <span id="gesture_text" class="hud-text">Waiting...</span>
+        </div>
+
+        <div id="virtual_cursor" class="virtual-cursor">
+            <div class="cursor-inner"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
