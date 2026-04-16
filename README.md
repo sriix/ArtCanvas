@@ -39,8 +39,6 @@ It uses **MediaPipe Hands** for real-time hand tracking and maps gestures to dra
 1. Clone the repository:
    ```bash
    git clone https://github.com/sriix/ArtCanvas.git
-## 📦 How to Run
-```bash
 2. Open index.html in Chrome (or any modern browser)
 3. Allow webcam access when prompted
 4. Use gestures to draw, erase, or move strokes in the air
